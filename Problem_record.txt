@@ -1,0 +1,2 @@
+#isoform
+java bw输出文件不全，而print可以。

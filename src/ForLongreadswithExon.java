@@ -4,10 +4,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
@@ -24,78 +23,94 @@ import java.util.TreeSet;
  */
 public class ForLongreadswithExon {
 
-    public static class LaE {
+    public static class Element_ex_L {
 
+        private boolean flag;
         Set<String> ex;
         String IdString;
-        Boolean flag;
 
-        public LaE() {
+        public void prints() {
+            for (String en : ex) {
+                System.out.print(en + "\t");
+            }
+            System.out.print("\n");
+        }
+
+        public Element_ex_L() {
             this.flag = true;
         }
+    }
 
-    };
-
-    public static void main(String[] args) throws IOException {
-        String LongwithexonFile = "src/LongwithExon";
-
+    public static void Deal(String LongwithexonFile) throws IOException {
+        // LongwithexonFile = "data/LongwithExon";
         Scanner FileScanner = new Scanner(new BufferedReader(new FileReader(LongwithexonFile)));
-
-        Set<LaE> LLaEs = new HashSet<>();
-        int i = 0;
-        BufferedWriter bw = new BufferedWriter(new FileWriter("src/clust" + i));
-        BufferedWriter bwm = new BufferedWriter(new FileWriter("src/mm"));
-        String s;
-        LaE l = new LaE();
-        l.IdString = "";
-        l.ex = new TreeSet<>();
-        while (FileScanner.hasNextLine()) {
-            s = FileScanner.nextLine();
-
-            if (s.toCharArray()[0] == 'm') {
-                if (!"".equals(l.IdString)) {
-                    LLaEs.add(l);
-                }
-                l = null;
-                l = new LaE();
-                l.IdString = s;
-                l.ex = new TreeSet<>();
-
-            } else {
-                l.ex.addAll(Arrays.asList(s.split("\t")));
-
-            }
-
-        }
-        List<LaE> sssList = new ArrayList<>(LLaEs);
-        for (LaE en : sssList) {
-            bwm.newLine();
-                bwm.write(en.IdString);
-                bwm.newLine();
-            for (String ss : en.ex) {
-                bwm.write(ss+"\t");
-                
-            }
-            
-        }
-        for (int j = 0; j < sssList.size(); j++) {
-            for (int k = j + 1; k < sssList.size(); k++) {
-                if (sssList.get(j).ex == sssList.get(k).ex) {
-                    System.out.println("yes");
-                    bw.write(sssList.get(k).IdString);
-                    bw.newLine();
-                    sssList.get(k).flag = false;//已检查过,禁止再次检查
-                }
-         
-            }
-       if (sssList.get(j).flag) {
-                    bw.write(sssList.get(j).IdString);
-                    sssList.get(j).flag = false;
-                    bw.newLine();
-                    bw.newLine();
-                }
-        }
+        
+        ClustList(FileToSet(FileScanner));
+        
+        FileScanner.close();
+        //       return 0;
+//        return ClustList(s);
 
     }
 
+    public static List FileToSet(Scanner file) {
+        Element_ex_L E = new Element_ex_L();
+        List List = new LinkedList();
+
+        String s;
+        while (file.hasNextLine()) {
+            s = file.nextLine();
+            if (s.toCharArray()[0] == 'm') {
+                if (E.IdString != null) {
+                    List.add(E);
+                }
+
+                E = new Element_ex_L();
+                E.IdString = s;
+                E.ex = new TreeSet<>();
+
+            } else {
+                E.ex.addAll(Arrays.asList(s.split("\t")));
+
+            }
+
+        }
+
+        return List;
+
+    }
+
+    public static void  ClustList(List<Element_ex_L> l) throws IOException {
+        SimpleDateFormat time = new SimpleDateFormat("mm:ss");
+        String times = time.format(new java.util.Date());
+        System.out.println(times);
+ //       List RedunList = null;
+        BufferedWriter bw = new BufferedWriter(new FileWriter("data/SetOfReads"));
+//        System.out.println(l.size());
+        for (int i = 0; i < l.size(); i++) {
+            if (l.get(i).flag) {
+
+                Element_ex_L tempL = l.get(i);
+                for (int j = i + 1; j < l.size(); j++) {
+//                      System.out.println(l.get(j).IdString);
+                    if (tempL.ex.equals(l.get(j).ex) && l.get(j).flag) {
+                        bw.write(l.get(j).IdString);
+                        bw.newLine();
+//                    System.out.println(l.get(j).IdString);
+                        l.get(j).flag = false;
+                    }
+                }
+                bw.write(l.get(i).IdString);
+                bw.newLine();
+                bw.newLine();
+//            System.out.println(l.get(i).IdString);
+//            System.out.println();
+                l.get(i).flag = false;
+            }
+        }
+        bw.flush();
+        bw.close();
+        System.out.println(times);
+        //return RedunList;
+    }
 }

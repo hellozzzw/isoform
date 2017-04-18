@@ -1,0 +1,46 @@
+get exon
+get exon[1~20]
+    exon 37016
+    uniq 36390
+map to fasta -->  reads.map.record
+    bowtie -f -a -v 2 --al reads.aln.fasta --un reads.unalign.fasta iso-seq-raw-reads.fasta  UniqExonDataset.fasta out
+
+sort by col3 -- >  reads.map.record.sort
+
+Scan:
+run:
+02:50
+fasta scanned
+ooo
+成功构建 (总时间: 1 秒)
+
+uniq:
+run:
+成功构建 (总时间: 3 秒)
+
+map:
+bowtie -f -a -v 2 --al reads.aln.fasta --un reads.unalign.fasta iso-seq-raw-reads.fasta  UniqExonDataset.fasta out
+# reads processed: 36321
+# reads with at least one reported alignment: 544 (1.50%)
+# reads that failed to align: 35777 (98.50%)
+Reported 127754 alignments to 1 output stream(s)
+
+alntoSet:
+run:
+成功构建 (总时间: 3 秒)
+[有两行是空行！！]
+
+
+50:22
+50:22
+成功构建 (总时间: 8 分钟 36 秒)
+clust reads 8589
+4399个cluster
+
+
+transATGC
+run:
+成功构建 (总时间: 2 秒)
+
+
+
