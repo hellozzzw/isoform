@@ -44,7 +44,7 @@ public class AlgnToSet {
 //        }
 //    }
 
-    public static Set<lgrExon> clust(String align)  {
+    public static Set<lgrExon> clust(String align,String LongwithExon)  {
         try {
             Scanner algS = new Scanner(new BufferedReader(new FileReader(align)));
             String sf = "", s0, s2;
@@ -52,13 +52,13 @@ public class AlgnToSet {
             temp.ID = sf;
             temp.exonSet = new HashSet<>();
             Set<lgrExon> ExonSetOfLongreads = new HashSet<>();
-            BufferedWriter bwe= new BufferedWriter(new FileWriter("data/LongwithExon"));
+            BufferedWriter bwe= new BufferedWriter(new FileWriter(LongwithExon));
            
 
             Set<String> tempexon = new HashSet<>();
             while (algS.hasNextLine()) {
-           //     System.out.println(algS.nextLine().split("\t")[2]);
-          //      System.out.println(algS.nextLine().split("\t")[0]);
+//                System.out.println(algS.nextLine().split("\t")[2]);
+//                System.out.println(algS.nextLine().split("\t")[0]);
                 s2 = algS.nextLine().split("\t")[2];
                 s0 = algS.nextLine().split("\t")[0];
                 //            System.out.println("tempID:"+temp.ID);
@@ -70,9 +70,8 @@ public class AlgnToSet {
 
 //                      System.out.println(temp.exonSet.size());
                     ExonSetOfLongreads.add(temp);
-                    bwe.write(temp.ID);
+                    bwe.write(temp.ID+"\n");
 //                    System.out.println(temp.ID);
-                    bwe.newLine();
                     for (String  xxx : temp.exonSet) {
                          bwe.write(xxx+"\t");
 //                         System.out.print(xxx+"\t");
@@ -105,7 +104,9 @@ public class AlgnToSet {
         } catch (FileNotFoundException e) {
         }  catch (IOException ex) {
                 Logger.getLogger(AlgnToSet.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            }catch(NoSuchElementException e){
+            System.out.println("finished");
+                    }
         
  return ExonSetOfLongreads;
         //  return ExonSetOfLongreads;

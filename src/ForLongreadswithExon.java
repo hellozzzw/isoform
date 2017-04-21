@@ -85,7 +85,7 @@ public class ForLongreadswithExon {
         String times = time.format(new java.util.Date());
         System.out.println(times);
  //       List RedunList = null;
-        BufferedWriter bw = new BufferedWriter(new FileWriter("data/SetOfReads"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("data/aln-j/SetOfReads"));
 //        System.out.println(l.size());
         for (int i = 0; i < l.size(); i++) {
             if (l.get(i).flag) {

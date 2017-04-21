@@ -20,14 +20,14 @@ import java.util.Set;
  */
 class reads {
 
-    static void ID2Reads(String ID_file) throws IOException {
+    static int  ID2Reads(String ID_file,String outfile) throws IOException {
         Scanner IDScanner = new Scanner(new BufferedReader(new FileReader(ID_file)));
 //        HashMap<String, String> nMap = new HashMap<>();
         Map<String, String> m = new HashMap();
 
         int i=0;
         Scanner fasta = new Scanner(new BufferedReader(new FileReader("data/pacbio-ccs-read.fasta")));
-        BufferedWriter bw = new BufferedWriter(new FileWriter("data/clust/ReadsClustFile"+i));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(outfile+i));
         String s, s2, s3;
         while (fasta.hasNextLine()) {
             s2 = fasta.nextLine().substring(1);
@@ -48,10 +48,13 @@ class reads {
 //                bw.newLine();
                 bw.flush();
                 bw.close();
-                bw= new BufferedWriter(new FileWriter("data/clust/ReadsClustFile"+(i++)));
+                
+                bw= new BufferedWriter(new FileWriter(outfile+(i++)));
 //                  System.out.println();
             } else {
-//                    System.out.println(m.get(s));
+//             System.out.println(m.get(s));
+                bw.write(">"+s.split("\\/")[1]);
+                bw.newLine();
                 bw.write(m.get(s));
                 bw.newLine();
 
@@ -62,6 +65,8 @@ class reads {
         bw.flush();
         bw.close();
         IDScanner.close();
+        return i;
+            
 
     }
 
